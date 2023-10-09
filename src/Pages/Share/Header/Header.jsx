@@ -1,23 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { Link, NavLink } from 'react-router-dom';
 import bistroLogo from '../../../assets/logo.png'
+import { AuthContext } from '../../../Provider/AuthProvider';
 
 const Header = () => {
 
-    const user={}
+   const {user,Logout_}=useContext(AuthContext)
     const isAdmin={}
     const cart={}
 
-    const handleLogout=()=>{
-
-    }
+    
 
     const navItems=<div className='lg:flex items-center justify-center '>
     <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to='/practice'>Practice</NavLink ></li>
     <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to='/'>Home</NavLink ></li>
     <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to='/menu'>Our Menu</NavLink ></li>
-    <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to='/order/:category'>Order Food</NavLink ></li>
+    <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to='/order/salad'>Order Food</NavLink ></li>
     <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to={isAdmin?'/dashboard/adminhome':'/dashboard/userhome'}>DashBoard</NavLink ></li>
     <li>
       <Link to='/dashboard/mycart'>
@@ -39,10 +38,10 @@ const Header = () => {
          user.displayName && 
          <li className={`font-bold lg:ms-5 `}> {user.displayName} </li>
        }
-       <li> <button onClick={handleLogout} className='btn btn-active btn-ghost lg:ms-5'>Logout</button> </li>
+       <button onClick={Logout_} className='btn btn-active btn-ghost lg:ms-5'>Logout</button> 
      </>
      :
-     <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}   to='/login'>Login</NavLink ></li>
+     <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}   to='/login'><button className='btn btn-primary'>Login</button></NavLink ></li>
     }
   
    </div>

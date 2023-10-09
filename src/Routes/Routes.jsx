@@ -10,6 +10,8 @@ import Home from "../Pages/Home/Home/Home";
 import Login from "../Pages/UserActivity/Login/Login";
 import SignUp from "../Pages/UserActivity/SignUp/SignUp";
 import Main from "../Layout/Main";
+import Menu from "../Pages/MenuPage/Menu/Menu";
+import Order from "../Pages/Order/Order/Order";
 
 const router = createBrowserRouter([
     {
@@ -31,6 +33,14 @@ const router = createBrowserRouter([
         {
             path: '/signup',
             element: <SignUp></SignUp>
+        },
+        {
+            path: '/menu',
+            element: <Menu></Menu>
+        },
+        {
+          path: '/order/:category',
+          element: <Order></Order>
         }
       ]
     },
