@@ -7,9 +7,9 @@ import { AuthContext } from '../../../Provider/AuthProvider';
 
 const Login = () => {
     const location=useLocation()
-    // console.log("Login Location: ",location);
-    const target=location?.state?.from || '/';
-    // console.log("Target: ",target);
+    console.log("Login Location: ",location);
+    const target=location?.state?.from?.pathname || '/';
+    console.log("Target: ",target);
 
     const navigate=useNavigate()
     const {user,signInByGoogle,successfullToast,unSuccessfullToast,loginByEmailPassword}=useContext(AuthContext)

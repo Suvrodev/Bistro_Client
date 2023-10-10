@@ -4,8 +4,10 @@ import Category from '../Category/Category';
 import PopularMenu from '../PopularMenu/PopularMenu';
 import FeaturedItem from '../Featured/FeaturedItem';
 import Testimonial from '../Testimonial/Testimonial';
+import { useLocation } from 'react-router-dom';
 
 const Home = () => {
+   
     return (
         <div>
             <Banner></Banner>

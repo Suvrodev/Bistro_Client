@@ -3,12 +3,13 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { Link, NavLink } from 'react-router-dom';
 import bistroLogo from '../../../assets/logo.png'
 import { AuthContext } from '../../../Provider/AuthProvider';
+import useCart from '../../../hooks/useCart';
 
 const Header = () => {
 
    const {user,Logout_}=useContext(AuthContext)
-    const isAdmin={}
-    const cart={}
+   const isAdmin={}
+   const [cart]=useCart()
 
     
 
@@ -18,18 +19,21 @@ const Header = () => {
     <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to='/menu'>Our Menu</NavLink ></li>
     <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to='/order/salad'>Order Food</NavLink ></li>
     <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to={isAdmin?'/dashboard/adminhome':'/dashboard/userhome'}>DashBoard</NavLink ></li>
-    <li>
-      <Link to='/dashboard/mycart'>
-      <button className="btn gap-2">
-        <FaShoppingCart/>
-        <div className="badge badge-secondary">{cart?.length || 0}</div>
-    </button>
-      </Link>
-    </li>
+   
   
     {
      user ?
      <>
+       {
+         <li>
+         <Link to='/dashboard/mycart'>
+          <button className="btn gap-2">
+            <FaShoppingCart/>
+            <div className="badge badge-secondary">{cart?.length || 0}</div>
+          </button>
+         </Link>
+       </li>
+       }
        {
          user.photoURL && 
          <img  className='w-10 h-10 rounded-full' src={user.photoURL}></img>
