@@ -40,9 +40,27 @@ const SignUp = () => {
           photoURL: photo,
         })
           .then((result) => {
-            console.log("Update Result:", result);
-            successfullToast("SinUp Successfully");
-            navigate("/home");
+
+            ////////User Data keep in db start
+            const saveUser={name,photo,email:user.email,role:""}
+            fetch('http://localhost:5000/user',{
+              method: 'POST',
+              headers:{
+                'content-type':'application/json'
+              },
+              body: JSON.stringify(saveUser)
+            })
+            .then(res=>res.json())
+            .then(data=>{
+              if(data.insertedId){
+                successfullToast("SinUp Successfully");
+                navigate("/home");
+              }
+            })
+            ////////User Data keep in db end
+
+          
+           
           })
           .catch((error) => {
             console.log("Error in Update: ", error.message);

@@ -7,9 +7,9 @@ import { AuthContext } from '../../../Provider/AuthProvider';
 
 const Login = () => {
     const location=useLocation()
-    console.log("Login Location: ",location);
+   // console.log("Login Location: ",location);
     const target=location?.state?.from?.pathname || '/';
-    console.log("Target: ",target);
+   // console.log("Target: ",target);
 
     const navigate=useNavigate()
     const {user,signInByGoogle,successfullToast,unSuccessfullToast,loginByEmailPassword}=useContext(AuthContext)
@@ -25,7 +25,24 @@ const Login = () => {
         .then(result=>{
             const loggedUser=result.user;
             console.log("Google User: ",loggedUser);
-            navigate(target,true)
+
+              ////////User Data keep in db start
+              const saveUser={name:loggedUser.displayName,photo:loggedUser.photoURL,email:loggedUser.email,role:""}
+              fetch('http://localhost:5000/user',{
+                method: 'POST',
+                headers:{
+                  'content-type':'application/json'
+                },
+                body: JSON.stringify(saveUser)
+              })
+              .then(res=>res.json())
+              .then(data=>{
+                  successfullToast("SinIn Successfully");
+                  navigate(target,true)
+              })
+              ////////User Data keep in db end
+
+           
         })
         .catch(error=>{
             console.log("Google Error: ",error.message);

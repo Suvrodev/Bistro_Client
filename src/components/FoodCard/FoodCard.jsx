@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../../Provider/AuthProvider';
 import { useLocation, useNavigate } from 'react-router-dom';
+import useCart from '../../hooks/useCart';
 
 const FoodCard = ({item}) => {
+    const [,refetch]=useCart()
     const {user,successfullToast,unSuccessfullToast}=useContext(AuthContext)
     const {_id,image,recipe,name,price}=item
     const navigate=useNavigate()
@@ -23,6 +25,7 @@ const FoodCard = ({item}) => {
             .then(res=>res.json())
             .then(data=>{
                 if(data.insertedId){
+                    refetch()
                     successfullToast('Food add to cart')
                 }
             })

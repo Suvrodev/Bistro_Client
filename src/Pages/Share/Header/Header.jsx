@@ -8,7 +8,7 @@ import useCart from '../../../hooks/useCart';
 const Header = () => {
 
    const {user,Logout_}=useContext(AuthContext)
-   const isAdmin={}
+   const isAdmin=true
    const [cart]=useCart()
 
     
@@ -18,7 +18,7 @@ const Header = () => {
     <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to='/'>Home</NavLink ></li>
     <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to='/menu'>Our Menu</NavLink ></li>
     <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to='/order/salad'>Order Food</NavLink ></li>
-    <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to={isAdmin?'/dashboard/adminhome':'/dashboard/userhome'}>DashBoard</NavLink ></li>
+    <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to={'/dashboard/mycart'}>DashBoard</NavLink ></li>
    
   
     {
