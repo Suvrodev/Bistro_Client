@@ -17,6 +17,7 @@ import PrivateRoute from "./PrivateRoute";
 import DashBoard from "../Layout/DashBoard";
 import MyCart from "../Pages/DashBoard/MyCart/MyCart";
 import AllUsers from "../Layout/AllUsers/AllUsers";
+import Header from "../Pages/Share/Header/Header";
 
 const router = createBrowserRouter([
     {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
         {
           path: '/secret',
           element: <PrivateRoute><Secret></Secret></PrivateRoute>
+        },
+        {
+          path: '/header',
+          element: <Header></Header>
         }
       ]
     },

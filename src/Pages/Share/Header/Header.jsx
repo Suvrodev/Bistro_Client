@@ -1,15 +1,44 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { Link, NavLink } from 'react-router-dom';
 import bistroLogo from '../../../assets/logo.png'
 import { AuthContext } from '../../../Provider/AuthProvider';
 import useCart from '../../../hooks/useCart';
+import useAdmin from '../../../hooks/useAdmin';
 
 const Header = () => {
 
-   const {user,Logout_}=useContext(AuthContext)
-   const isAdmin=true
+   const {user,Logout_,loading}=useContext(AuthContext)
    const [cart]=useCart()
+  //  const [isAdmin,loading]=useAdmin("def")
+  //  console.log("Is Admin from Header: ",isAdmin);
+
+    ////Check Admin or not start
+   
+   ////Check Admin or not start
+   const [checkUser,setCheckUser]=useState("")
+  const Mail=user?.email
+  console.log("Header Mail: ",Mail);
+
+    useEffect(()=>{
+      if(Mail){
+          fetch(`http://localhost:5000/check/${Mail}`)
+          .then(res=>res.json())
+          .then(data=>{
+            setCheckUser(data)
+          })
+        }
+    },[Mail])
+    console.log("Check User(Header): ",checkUser);
+
+    let isAdmin;
+    if(checkUser?.role==='admin'){
+      isAdmin=true
+    }else{
+      isAdmin=false
+    }
+    console.log("isAdmin: ",isAdmin);
+    ////Check Admin or not End
 
     
 
@@ -18,7 +47,8 @@ const Header = () => {
     <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to='/'>Home</NavLink ></li>
     <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to='/menu'>Our Menu</NavLink ></li>
     <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to='/order/salad'>Order Food</NavLink ></li>
-    <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to={'/dashboard/mycart'}>DashBoard</NavLink ></li>
+    {/* <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to={`/dashboard`}>DashBoard</NavLink ></li> */}
+    <li><NavLink className={({isActive})=> isActive? 'text-blue-500 font-extrabold':''}  to={`${isAdmin?'/dashboard/allusers':'/dashboard/mycart'} `}>DashBoard</NavLink ></li>
    
   
     {

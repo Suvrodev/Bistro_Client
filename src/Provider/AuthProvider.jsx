@@ -37,6 +37,7 @@ const AuthProvider = ({children}) => {
         signOut(auth)
         .then(()=>{
             console.log("SignOut Successfully");
+            localStorage.removeItem('bistro')
         })
         .then(error=>{
             // console.log("SignOut Error: ",error.message);
@@ -51,6 +52,23 @@ const AuthProvider = ({children}) => {
             console.log("Current User: ",currentUser);
             setLoading(false)
             setUser(currentUser)
+
+            // ///JWT Start
+            // if(currentUser){
+            //     const jwtUser={email: currentUser?.email}
+            //     fetch(`http://localhost:5000/jwt`,{
+            //         method: 'POST',
+            //         headers:{
+            //             'content-type': 'application/json'
+            //         },
+            //         body: JSON.stringify(jwtUser)
+            //     })
+            //     .then(res=>res.json())
+            //     .then(data=>{
+            //         localStorage.setItem('bistro',data.token)
+            //     })
+            // }
+            // ///JWT End
         })
         return ()=> unSubscribe()
     },[])

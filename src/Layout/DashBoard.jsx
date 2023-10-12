@@ -1,12 +1,41 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FaBars, FaBook, FaCalendarAlt, FaHome, FaShoppingCart, FaUsers, FaUtensils, FaWallet } from 'react-icons/fa';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import useCart from '../hooks/useCart';
+import { AuthContext } from '../Provider/AuthProvider';
 
 const DashBoard = () => {
   
-    const [cart]=useCart()
-    const isAdmin=true
+  const [cart]=useCart()
+  const {user}=useContext(AuthContext)
+  const navigate=useNavigate()
+  
+  
+
+
+  ////Check Admin or not start
+  const Mail=user?.email
+  console.log("Dashboard Mail: ",Mail);
+
+  const [checkUser,setCheckUser]=useState("")
+  useEffect(()=>{
+    fetch(`http://localhost:5000/check/${Mail}`)
+    .then(res=>res.json())
+    .then(data=>setCheckUser(data))
+  },[])
+  console.log("Check User(DashBoard): ",checkUser);
+
+  let isAdmin;
+  if(checkUser?.role=='admin'){
+    isAdmin=true
+  }else{
+    isAdmin=false
+  }
+  console.log("isAdmin: ",isAdmin);
+    ////Check Admin or not End
+
+
+ 
 
     return (
         <div className="drawer lg:drawer-open">
@@ -28,6 +57,7 @@ const DashBoard = () => {
             {/* Sidebar content here */}
             {
             isAdmin ? <>
+              <li className='text-center font-bold text-xl'>Admin Pannel</li>
               <li><NavLink to='/dashboard/adminhome'> <FaHome/> Admin Home  </NavLink></li>
               <li ><NavLink to='/dashboard/additem'> <FaUtensils/> Add an Item </NavLink></li>
               <li><NavLink to='/dashboard/manageitems'> <FaWallet/> Manage Items  </NavLink></li>
@@ -36,6 +66,7 @@ const DashBoard = () => {
             </>
             :
             <>
+                <li className='text-center font-bold text-xl'>User Pannel</li>
                 <li><NavLink to='/dashboard/userhome'> <FaHome/> User Home  </NavLink></li>
                 <li ><NavLink to='/dashboard/reservations'> <FaCalendarAlt/> Reservations </NavLink></li>
                 <li><NavLink to='/dashboard/history'> <FaWallet/> Payment History  </NavLink></li>
