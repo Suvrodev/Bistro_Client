@@ -4,11 +4,36 @@ import { Helmet } from 'react-helmet-async';
 import { FaTrashAlt, FaUserShield } from 'react-icons/fa';
 import useUsers from '../../hooks/useUsers';
 import { AuthContext } from '../../Provider/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 const AllUsers = () => {
 
-    const {successfullToast}=useContext(AuthContext)
+    const {user,successfullToast,Logout_}=useContext(AuthContext)
     const [users,refetch]=useUsers()
+
+
+    ////Check Admin or not start
+        const navigate=useNavigate()
+        const Mail=user?.email
+        console.log("All User Mail: ",Mail);
+
+        const [checkUser,setCheckUser]=useState("")
+        useEffect(()=>{
+            fetch(`http://localhost:5000/check/${Mail}`)
+            .then(res=>res.json())
+            .then(data=>setCheckUser(data))
+        },[])
+        console.log("Check User(All User): ",checkUser);
+
+        let isAdmin;
+        if(checkUser?.role=='admin'){
+            isAdmin=true
+        }else{
+            Logout_()
+            navigate('/')
+        }
+        console.log("isAdmin: ",isAdmin);
+    ////Check Admin or not End
 
 
     const handleDelete=(_id)=>{
