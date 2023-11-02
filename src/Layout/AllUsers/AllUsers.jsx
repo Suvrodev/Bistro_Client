@@ -5,7 +5,9 @@ import { FaTrashAlt, FaUserShield } from 'react-icons/fa';
 import useUsers from '../../hooks/useUsers';
 import { AuthContext } from '../../Provider/AuthProvider';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
+const token=localStorage.getItem('bistro')
 const AllUsers = () => {
 
     const {user,successfullToast,Logout_}=useContext(AuthContext)
@@ -16,12 +18,9 @@ const AllUsers = () => {
 
 
     const handleDelete=(_id)=>{
-        fetch(`http://localhost:5000/user/${_id}`,{
-            method: 'DELETE'
-        })
-        .then(res=>res.json())
-        .then(data=>{
-            if(data.deletedCount>0){
+        axios.delete(`http://localhost:5000/user/${_id}`,{headers: {Authorization: `bearer ${token}` }})
+        .then(res=>{
+            if(res.data.deletedCount>0){
                 refetch()
                 successfullToast("Deleted User Successfully")
             }
@@ -30,22 +29,30 @@ const AllUsers = () => {
 
     const handleMakeAdmin=(user)=>{
         user.role="admin"
-        fetch(`http://localhost:5000/user/${user._id}`,{
-            method: 'PATCH',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        })
-        .then(res=>res.json())
-        .then(data=>{
-            console.log('after modify, data:',data)
-            refetch();
-            if(data.modifiedCount>0){
-              successfullToast("Convert to admin")
-             
+        console.log("Now user: ",user);
+        axios.patch(`http://localhost:5000/user/${user._id}`,user,{headers: {Authorization: `bearer ${token}`}})
+        .then(res=>{
+            if(res.data.modifiedCount>0){
+                refetch()
+                successfullToast("Convert to admin")
             }
         })
+        // fetch(`http://localhost:5000/user/${user._id}`,{
+        //     method: 'PATCH',
+        //     headers: {
+        //         'content-type': 'application/json'
+        //     },
+        //     body: JSON.stringify(user)
+        // })
+        // .then(res=>res.json())
+        // .then(data=>{
+        //     console.log('after modify, data:',data)
+        //     refetch();
+        //     if(data.modifiedCount>0){
+        //       successfullToast("Convert to admin")
+             
+        //     }
+        // })
     }
 
     

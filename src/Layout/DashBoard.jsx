@@ -13,8 +13,8 @@ const DashBoard = () => {
   
 
 
-  const [isAdmin,loading]=useAdmin()
-  console.log("isAdmin from Dashboard:",isAdmin);
+  const [isAdmin,isAdminLoading]=useAdmin()
+  // console.log("isAdmin from Dashboard:",isAdmin);
   
   // let checkAdmin=false
   // if(isAdmin){
