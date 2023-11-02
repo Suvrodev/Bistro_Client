@@ -1,33 +1,40 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Provider/AuthProvider";
+import useAxiosSecure from "./useAxiosSecure";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
-const useAdmin = (def) => {
+const useAdmin = () => {
     const {user,loading}=useContext(AuthContext)
-    console.log("Chek Def from Hook",def);
+    const token=localStorage.getItem('bistro')
 
-     ////Check Admin or not start
-     const Mail=user?.email
-     console.log("Hook Mail: ",Mail);
-     const [checkUser,setCheckUser]=useState("")
-     useEffect(()=>{
-       if(!loading){
-            fetch(`http://localhost:5000/check/${Mail}`)
-            .then(res=>res.json())
-            .then(data=>{
-                console.log("Come");
-                setCheckUser(data)
-            })
-       }
-     },[def])
-     console.log("Check User(Hook): ",checkUser);
-     let isAdmin;
-     if(checkUser?.role=='admin'){
-       isAdmin=true
-     }else{
-       isAdmin=false
-     }
-    ////Check Admin or not End
-    return [isAdmin,loading]
+    // console.log("Check Def from Hook");
+    // const [isAdmin,setIsAdmin]=useState("")
+
+    // useEffect(()=>{
+    //   axios.get(`http://localhost:5000/user/${user?.email}`,{
+    //     headers:{authorization:`bearer ${token}`}
+    // })
+    //   .then(res=>{
+    //     setIsAdmin(res.data.admin);
+    //   })
+    // },[])
+
+    // return [isAdmin,loading]
+
+
+    const {data:isAdmin,isLoading:isAdminLoading}=useQuery({
+      queryKey:['isAdmin',user?.email],
+      queryFn: async()=>{
+        const res=await fetch(`http://localhost:5000/user/${user?.email}`,{
+              headers:{authorization:`bearer ${token}`}
+          })
+        // console.log("----------",res.json());
+        return res.json()
+      }
+    })
+    return [isAdmin,isAdminLoading]
+    
 };
 
 export default useAdmin;

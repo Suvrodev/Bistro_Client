@@ -3,6 +3,7 @@ import { FaBars, FaBook, FaCalendarAlt, FaHome, FaShoppingCart, FaUsers, FaUtens
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import useCart from '../hooks/useCart';
 import { AuthContext } from '../Provider/AuthProvider';
+import useAdmin from '../hooks/useAdmin';
 
 const DashBoard = () => {
   
@@ -10,30 +11,16 @@ const DashBoard = () => {
   const {user}=useContext(AuthContext)
   const navigate=useNavigate()
   
+
+
+  const [isAdmin,loading]=useAdmin()
+  console.log("isAdmin from Dashboard:",isAdmin);
   
-
-
-  ////Check Admin or not start
-  const Mail=user?.email
-  console.log("Dashboard Mail: ",Mail);
-
-  const [checkUser,setCheckUser]=useState("")
-  useEffect(()=>{
-    fetch(`http://localhost:5000/check/${Mail}`)
-    .then(res=>res.json())
-    .then(data=>setCheckUser(data))
-  },[])
-  console.log("Check User(DashBoard): ",checkUser);
-
-  let isAdmin;
-  if(checkUser?.role=='admin'){
-    isAdmin=true
-  }else{
-    isAdmin=false
-  }
-  console.log("isAdmin: ",isAdmin);
-    ////Check Admin or not End
-
+  // let checkAdmin=false
+  // if(isAdmin){
+  //   checkAdmin=isAdmin.admin
+  //   console.log("Check Admin:",checkAdmin);
+  // }
 
  
 
@@ -56,7 +43,7 @@ const DashBoard = () => {
           <ul className="menu p-4 w-80 min-h-full bg-[#D1A054] text-black">
             {/* Sidebar content here */}
             {
-            isAdmin ? <>
+            isAdmin?.admin ? <>
               <li className='text-center font-bold text-xl'>Admin Pannel</li>
               <li><NavLink to='/dashboard/adminhome'> <FaHome/> Admin Home  </NavLink></li>
               <li ><NavLink to='/dashboard/additem'> <FaUtensils/> Add an Item </NavLink></li>

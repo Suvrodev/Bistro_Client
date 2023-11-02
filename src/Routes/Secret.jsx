@@ -1,19 +1,28 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 const Secret = () => {
 
+    const token=localStorage.getItem('bistro')
+
     const [we,setWe]=useState([])
     useEffect(()=>{
-        fetch('http://localhost:5000/we',{
-            method: 'GET',
-            headers: {
-                authorization: `Bearer ${localStorage.getItem('bistro')}`
-            }
+        axios.get('http://localhost:5000/we',{
+            headers:{authorization:`bearer ${token}`}
         })
-        .then(res=>res.json())
-        .then(data=>setWe(data))
+        .then(res=>setWe(res.data))
     },[])
     console.log(we);
+
+    // useEffect(()=>{
+    //     fetch('http://localhost:5000/we',{
+    //         headers:{authorization: `bearer ${token}`}
+    //     })
+    //     .then(res=>res.json())
+    //     .then(data=>setWe(data))
+    // },[])
+    // console.log("We: ",we);
+
     return (
        <div className='overflow-auto'>
          <div className='mt-[150px]'>

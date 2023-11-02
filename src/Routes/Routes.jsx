@@ -18,6 +18,8 @@ import DashBoard from "../Layout/DashBoard";
 import MyCart from "../Pages/DashBoard/MyCart/MyCart";
 import AllUsers from "../Layout/AllUsers/AllUsers";
 import Header from "../Pages/Share/Header/Header";
+import MouceScroll from "./CheckSomething/MouceScroll";
+import AdminRoute from "./AdminRoute";
 
 const router = createBrowserRouter([
     {
@@ -55,7 +57,12 @@ const router = createBrowserRouter([
         {
           path: '/header',
           element: <Header></Header>
-        }
+        },
+        {
+          path: '/ms',
+          element: <MouceScroll></MouceScroll>
+        },
+       
       ]
     },
     {
@@ -68,7 +75,7 @@ const router = createBrowserRouter([
         },
         {
           path: 'allusers',
-          element:<AllUsers></AllUsers>
+          element:<AdminRoute><AllUsers></AllUsers></AdminRoute>
         }
       ]
     }

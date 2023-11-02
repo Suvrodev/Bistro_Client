@@ -18,7 +18,7 @@ const Header = () => {
    ////Check Admin or not start
    const [checkUser,setCheckUser]=useState("")
   const Mail=user?.email
-  console.log("Header Mail: ",Mail);
+  // console.log("Header Mail: ",Mail);
 
     useEffect(()=>{
       if(Mail){
@@ -29,7 +29,7 @@ const Header = () => {
           })
         }
     },[Mail])
-    console.log("Check User(Header): ",checkUser);
+    // console.log("Check User(Header): ",checkUser);
 
     let isAdmin;
     if(checkUser?.role==='admin'){
@@ -37,7 +37,7 @@ const Header = () => {
     }else{
       isAdmin=false
     }
-    console.log("isAdmin: ",isAdmin);
+    // console.log("isAdmin(Header): ",isAdmin);
     ////Check Admin or not End
 
     
