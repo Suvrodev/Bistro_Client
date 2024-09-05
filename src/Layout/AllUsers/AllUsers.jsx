@@ -11,7 +11,7 @@ const token=localStorage.getItem('bistro')
 const AllUsers = () => {
 
     const {user,successfullToast,Logout_}=useContext(AuthContext)
-    const [users,refetch]=useUsers()
+    const [users,refetch]=useUsers(10)
 
 
    
@@ -33,7 +33,7 @@ const AllUsers = () => {
         axios.patch(`http://localhost:5000/user/${user._id}`,user,{headers: {Authorization: `bearer ${token}`}})
         .then(res=>{
             if(res.data.modifiedCount>0){
-                refetch()
+                refetch('xy')
                 successfullToast("Convert to admin")
             }
         })
