@@ -63,22 +63,6 @@ const AuthProvider = ({ children }) => {
       // setLoading(false)
       setUser(currentUser);
 
-      // ///JWT Start
-      // if(currentUser){
-      //     const jwtUser={email: currentUser?.email}
-      //     fetch(`http://localhost:5000/jwt`,{
-      //         method: 'POST',
-      //         headers:{
-      //             'content-type': 'application/json'
-      //         },
-      //         body: JSON.stringify(jwtUser)
-      //     })
-      //     .then(res=>res.json())
-      //     .then(data=>{
-      //         localStorage.setItem('bistro',data.token)
-      //     })
-      // }
-
       if (currentUser) {
         axios
           .post("http://localhost:5000/jwt", { email: currentUser.email })

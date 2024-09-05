@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import useCart from "../../../hooks/useCart";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
 import { FaTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../Provider/AuthProvider";
 
 const MyCart = () => {
   const [cart, refetch] = useCart();
-//   console.log(cart);
+  const { baseUrl } = useContext(AuthContext);
   let total = cart.reduce((sum, item) => item.price + sum, 0);
-  total= total.toFixed(2)
+  total = total.toFixed(2);
 
   const handleDelete = (item) => {
     Swal.fire({
@@ -23,7 +24,7 @@ const MyCart = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         console.log(item._id);
-        fetch(`http://localhost:5000/cart/${item._id}`, {
+        fetch(`${baseUrl}/cart/${item._id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())

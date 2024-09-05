@@ -1,105 +1,142 @@
-import React, { useContext, useState } from 'react';
-import './Login.css'
-import { Helmet } from 'react-helmet-async';
-import { FaEye, FaEyeSlash, FaGoogle } from 'react-icons/fa';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../../Provider/AuthProvider';
+import React, { useContext, useState } from "react";
+import "./Login.css";
+import { Helmet } from "react-helmet-async";
+import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../Provider/AuthProvider";
 
 const Login = () => {
-    const location=useLocation()
-   // console.log("Login Location: ",location);
-    const target=location?.state?.from?.pathname || '/';
-   // console.log("Target: ",target);
+  const location = useLocation();
+  // console.log("Login Location: ",location);
+  const target = location?.state?.from?.pathname || "/";
+  // console.log("Target: ",target);
 
-    const navigate=useNavigate()
-    const {user,signInByGoogle,successfullToast,unSuccessfullToast,loginByEmailPassword}=useContext(AuthContext)
+  const navigate = useNavigate();
+  const {
+    user,
+    signInByGoogle,
+    successfullToast,
+    unSuccessfullToast,
+    loginByEmailPassword,
+    baseUrl,
+  } = useContext(AuthContext);
 
-    const [showPassword,setShowPassword]=useState(false)
-    const handlePassword=()=>{
-        setShowPassword(!showPassword)
-        console.log(showPassword);
-    }
+  const [showPassword, setShowPassword] = useState(false);
+  const handlePassword = () => {
+    setShowPassword(!showPassword);
+    console.log(showPassword);
+  };
 
-    const handleGoogleLogin=()=>{
-        signInByGoogle()
-        .then(result=>{
-            const loggedUser=result.user;
-            console.log("Google User: ",loggedUser);
+  const handleGoogleLogin = () => {
+    signInByGoogle()
+      .then((result) => {
+        const loggedUser = result.user;
+        console.log("Google User: ", loggedUser);
 
-              ////////User Data keep in db start
-              const saveUser={name:loggedUser.displayName,photo:loggedUser.photoURL,email:loggedUser.email,role:""}
-              fetch('http://localhost:5000/user',{
-                method: 'POST',
-                headers:{
-                  'content-type':'application/json'
-                },
-                body: JSON.stringify(saveUser)
-              })
-              .then(res=>res.json())
-              .then(data=>{
-                  successfullToast("SinIn Successfully");
-                  navigate(target,true)
-              })
-              ////////User Data keep in db end
-
-           
+        ////////User Data keep in db start
+        const saveUser = {
+          name: loggedUser.displayName,
+          photo: loggedUser.photoURL,
+          email: loggedUser.email,
+          role: "",
+        };
+        fetch(`${baseUrl}/user`, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(saveUser),
         })
-        .catch(error=>{
-            console.log("Google Error: ",error.message);
-        })
-    }
+          .then((res) => res.json())
+          .then((data) => {
+            successfullToast("SinIn Successfully");
+            navigate(target, true);
+          });
+        ////////User Data keep in db end
+      })
+      .catch((error) => {
+        console.log("Google Error: ", error.message);
+      });
+  };
 
-    const handleLogin=(event)=>{
-        event.preventDefault();
-        const form=event.target;
-        const email=form.email.value;
-        const password=form.password.value;
+  const handleLogin = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const email = form.email.value;
+    const password = form.password.value;
 
-        loginByEmailPassword(email,password)
-        .then(result=>{
-            const loggedUser=result.user;
-            console.log("Login User: ",loggedUser);
-            successfullToast("Login Successfuly")
-            navigate(target)
-        })
-        .catch(error=>{
-            unSuccessfullToast("Email or Password not Matched")
-        })
-    }
+    loginByEmailPassword(email, password)
+      .then((result) => {
+        const loggedUser = result.user;
+        console.log("Login User: ", loggedUser);
+        successfullToast("Login Successfuly");
+        navigate(target);
+      })
+      .catch((error) => {
+        unSuccessfullToast("Email or Password not Matched");
+      });
+  };
 
-
-    return (
-        <div className='bg-purple-300 border-black border-1 rounded-lg m-5 p-4'> 
-        <Helmet>
-                <title>Login || Bistro</title>
-        </Helmet> 
-                <div className='hereForm  '>
-                    
-                   <form action="" onSubmit={handleLogin} className='w-[80%] mx-auto'>
-                        <h1 className='text-black font-bold text-center'>Login Your Account</h1>
-                        <p className='border w-[80%] mx-auto my-5'></p>
-                        <p className='font-bold mb-4'>Email Address</p>
-                        <input className='w-[100%] p-2 mx-auto text-white border-0 outline-none' type="email" name="email"  placeholder='Enter your email address' required/>
-                        <p className='font-bold my-4'>Password</p>
-                        <div className='relative'>
-                            <input className='w-[100%] p-2 mx-auto text-white border-0 outline-none' type={showPassword? "text" : "password"} name="password"  placeholder='Enter your Password' required/>
-                           <div  onClick={handlePassword}>
-                              {
-                                showPassword? <FaEyeSlash className='ICON'/> : <FaEye className='ICON'/>
-                              }
-                           </div>
-                        </div>
-                        <br />
-                        <button className='btn bg-black text-white w-[100%] mt-5'>Login</button>
-                        <p className='text-center mt-2'>Dont’t Have An Account ? <Link to={'/signup'} className='text-red-500 font-bold'>SignUp</Link></p>
-                   </form>
-                   <div className='w-[80%] mx-auto '>
-                       <p className='text-center font-bold'>Login With</p>
-                       <button onClick={handleGoogleLogin} className='btn btn-group block mx-auto mt-2 bg-yellow-500 text-white border-0 '> <FaGoogle/> </button>
-                   </div>
-                </div>
+  return (
+    <div className="bg-purple-300 border-black border-1 rounded-lg m-5 p-4">
+      <Helmet>
+        <title>Login || Bistro</title>
+      </Helmet>
+      <div className="hereForm  ">
+        <form action="" onSubmit={handleLogin} className="w-[80%] mx-auto">
+          <h1 className="text-black font-bold text-center">
+            Login Your Account
+          </h1>
+          <p className="border w-[80%] mx-auto my-5"></p>
+          <p className="font-bold mb-4">Email Address</p>
+          <input
+            className="w-[100%] p-2 mx-auto text-white border-0 outline-none"
+            type="email"
+            name="email"
+            placeholder="Enter your email address"
+            required
+          />
+          <p className="font-bold my-4">Password</p>
+          <div className="relative">
+            <input
+              className="w-[100%] p-2 mx-auto text-white border-0 outline-none"
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Enter your Password"
+              required
+            />
+            <div onClick={handlePassword}>
+              {showPassword ? (
+                <FaEyeSlash className="ICON" />
+              ) : (
+                <FaEye className="ICON" />
+              )}
             </div>
-    );
+          </div>
+          <br />
+          <button className="btn bg-black text-white w-[100%] mt-5">
+            Login
+          </button>
+          <p className="text-center mt-2">
+            Dont’t Have An Account ?{" "}
+            <Link to={"/signup"} className="text-red-500 font-bold">
+              SignUp
+            </Link>
+          </p>
+        </form>
+        <div className="w-[80%] mx-auto ">
+          <p className="text-center font-bold">Login With</p>
+          <button
+            onClick={handleGoogleLogin}
+            className="btn btn-group block mx-auto mt-2 bg-yellow-500 text-white border-0 "
+          >
+            {" "}
+            <FaGoogle />{" "}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Login;
